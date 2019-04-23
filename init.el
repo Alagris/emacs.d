@@ -166,3 +166,56 @@ This is DEPRECATED, use %s instead." prelude-modules-file))
  (run-at-time 5 nil 'prelude-tip-of-the-day))
 
 ;;; init.el ends here
+
+(load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
+
+
+(defun er-switch-to-previous-buffer ()
+  "Switch to previously open buffer.
+Repeated invocations toggle between the two most recently open buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(global-set-key (kbd "s-<down>") (lambda () (interactive) (next-line 10)))
+(global-set-key (kbd "s-<up>") (lambda () (interactive) (previous-line 10)))
+(global-set-key (kbd "s-<right>") 'end-of-line)
+(global-set-key (kbd "s-<left>") 'beginning-of-line)
+(global-set-key (kbd "M-q") 'delete-window)
+(global-set-key (kbd "M-<tab>") 'ace-window)
+(global-set-key (kbd "s-d") 'kill-whole-line)
+(global-set-key (kbd "M-l") 'split-window-right)
+(global-set-key (kbd "M-i") 'split-window-below)
+(global-set-key (kbd "M-k") 'crux-swap-windows)
+(global-set-key (kbd "s-<backspace>") 'er-switch-to-previous-buffer)
+(global-set-key (kbd "C-<tab>") 'switch-to-buffer)
+(global-set-key (kbd "C-<space>") 'ac-start)
+(global-set-key (kbd "s-/") (lambda () (interactive) (comment-line nil) (previous-line 1)))
+(global-set-key (kbd "s-f") 'swiper)
+(global-set-key (kbd "s-,") (lambda () (interactive) (term "/bin/bash")))
+
+(eval-after-load 'haskell-mode
+  '(define-key haskell-mode-map  (kbd "s-<return>") 'haskell-process-load-or-reload))
+
+
+(eval-after-load 'haskell-mode
+  '(define-key haskell-mode-map  (kbd "s-<mouse-1>") 'haskell-mode-jump-to-def))
+
+(global-unset-key (vector (list 'shift 'left)))
+(global-unset-key (vector (list 'shift 'right)))
+(global-unset-key (vector (list 'shift 'up)))
+(global-unset-key (vector (list 'shift 'down)))
+(setq shift-selection-mode t)
+(setq prelude-guru nil)
+(require 'workgroups)
+(workgroups-mode 1)
+(wg-load "/Users/alagris/.emacs.d/workgroups/default.el")
+
+(require 'multiple-cursors)
+
+(global-set-key (kbd "s-S") 'mc/mark-all-like-this)
+(global-set-key (kbd "H-<mouse-1>") 'mc/add-cursor-on-click)
+(global-set-key (kbd "H-<mouse-3>") 'mc/edit-ends-of-lines)
+(global-set-key (kbd "H-f") 'mc/mark-all-like-this)
+
+(turn-off-smartparens-strict-mode)
